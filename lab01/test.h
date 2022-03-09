@@ -5,4 +5,8 @@
 
 char *string = "This is SO, too!";
 
+#ifdef BONUS
+#define C 4
+#endif // BONUS
+
 #endif
