@@ -9,7 +9,12 @@ char shorts[] = "This\n";
 void ocreate(void)
 {
 	int rc, fd;
-
+	// O_CREAT
+	// O_RDWR
+	// O_RDONLY
+	// O_WRONLY
+	// O_APPEND
+	// O_TRUNC
 }
 
 void rewrite(void)
