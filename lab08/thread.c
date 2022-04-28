@@ -11,7 +11,7 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 int count;
 __thread int count_t;
 
-struct targ {
+struct targs {
 	int id;
 	int var;
 };
