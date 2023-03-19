@@ -107,3 +107,6 @@ SYMBOL TABLE:
 
 ```
 
+# Solution
+
+Check [this file](location.md).
