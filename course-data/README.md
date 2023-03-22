@@ -192,6 +192,8 @@ We see that:
 
 This behaviour is related to how `malloc` uses its data: even though it calls `mmap()`, it needs additional space to save information about allocated data (such as the length). Moreover, `malloc()` allocates more data than required so that an eventual `realloc()` will be space efficient.
 
+Additional Explainations for `malloc` are [here](https://stackoverflow.com/questions/66828363/why-does-malloc-cause-minor-page-fault).
+
 ## Out of bounds
 
 We run `make alloc_out` which generates a new executable file named `alloc_out`.
