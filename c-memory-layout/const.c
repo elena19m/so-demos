@@ -20,7 +20,7 @@ int main() {
 	cp2[0] = 'D';
 	// cp2 = buf2;
 
-	// const char *char cp3
+	// const char *const cp3
 	// we cannot modify the memory region cp2 point to
 	// we cannot modify the address cp2 saves
 	// cp3[0] = 'D';
