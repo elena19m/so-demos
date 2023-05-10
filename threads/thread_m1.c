@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 #define N	8
-#define ROUNDS	100000
+#define ROUNDS	1000000
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -22,16 +22,12 @@ void *routine(void *args)
 	int local = 0;
 	struct targs *targs = (struct targs *)args;
 
-	pthread_mutex_lock(&mutex);
 	for (i = 0; i < ROUNDS; i++) {
+		pthread_mutex_lock(&mutex);
 		count = count  + targs->var;
-		count_t = count_t  + targs->var;
-		local = local + targs->var;
+		pthread_mutex_unlock(&mutex);
 	}
-	pthread_mutex_unlock(&mutex);
 	printf("Thread %d: count = %d\n", targs->id, count);
-	printf("Thread %d: count_t = %d\n", targs->id, count_t);
-	printf("Thread %d: local = %d\n", targs->id, local);
 
 	return NULL;
 }

@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 #define N	8
-#define ROUNDS	100000
+#define ROUNDS	1000000
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
