@@ -11,14 +11,14 @@
 void func1() {
 	pid_t pid;
 	int status;
-	const char *argv[] = {"ls", NULL};
+	char *const argv[] = {"ls", NULL};
 	printf("# ls\n");
 
 	pid = fork();
 	if (pid == 0) {
 		// child
 		printf("Child\n");
-		execv("/bin/ls", argv);
+		execvp(argv[0], argv);
 		printf("Child exit\n");
 		exit(0);
 
@@ -36,14 +36,14 @@ void func1() {
 void func2() {
 	pid_t pid;
 	int status;
-	const char *argv[] = {"ls", "-a", "-l", NULL};
+	char * const argv[] = {"ls", "-a", "-l", NULL};
 	printf("# ls -a -l\n");
 
 	pid = fork();
 	if (pid == 0) {
 		// child
 		printf("Child\n");
-		execv("/bin/ls", argv);
+		execvp(argv[0], argv);
 		printf("Child exit\n");
 		exit(0);
 
@@ -61,7 +61,7 @@ void func3() {
 	pid_t pid;
 	int status;
 	int fd;
-	const char *argv[] = {"ls", NULL};
+	char * const argv[] = {"ls", NULL};
 	printf("# ls > out\n");
 
 
@@ -72,7 +72,7 @@ void func3() {
 		fd = open("out", O_CREAT | O_RDWR | O_TRUNC, 0644);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
-		execv("/bin/ls", argv);
+		execvp(argv[0], argv);
 
 	} else if (pid > 0) {
 		// parent
@@ -88,22 +88,23 @@ void func3() {
 void func4() {
 	pid_t pid, pid2;
 	int status;
-	int fd[2];
-	const char *argv[] = {"ls", NULL};
-	const char *argv2[] = {"wc", "-l", NULL};
+	int *fd;
+	char * const argv[] = {"ls", NULL};
+	char * const argv2[] = {"wc", "-l", NULL};
 	printf("# ls | wc -l\n");
 
 	// ls > out
 	// wc -l < out
 
-	pipe(&fd);
+	fd = malloc(2 * sizeof(fd));
+	pipe(fd);
 	pid = fork();
 
 	if (pid == 0) {
 		// ls
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
-		execv("/bin/ls", argv);
+		execvp(argv[0], argv);
 	} else if (pid > 0) {
 		// parent
 		pid2 = fork();
@@ -111,11 +112,12 @@ void func4() {
 			// wc -l
 			close(fd[1]);
 			dup2(fd[0], STDIN_FILENO);
-			execv("/usr/bin/wc", argv2);
+			execvp(argv2[0], argv2);
 		} else if (pid2 > 0) {
 			// parent
 			close(fd[0]);
 			close(fd[1]);
+			free(fd);
 			waitpid(pid, &status, 0);
 			waitpid(pid2, &status, 0);
 		}
