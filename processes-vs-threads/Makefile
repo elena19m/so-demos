@@ -10,7 +10,7 @@ fork.o: fork.c
 
 threads: threads.o
 
-threads.o: threads.c 
+threads.o: threads.c
 
 clean:
-	rm -f fork threads *.o 
+	rm -f fork threads *.o
