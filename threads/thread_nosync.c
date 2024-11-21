@@ -5,6 +5,7 @@
 
 #define N	8
 #define ROUNDS	1000000
+//#define ROUNDS	1
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -19,7 +20,6 @@ struct targs {
 void *routine(void *args)
 {
 	int i;
-	int local = 0;
 	struct targs *targs = (struct targs *)args;
 
 	for (i = 0; i < ROUNDS; i++) {
@@ -54,6 +54,8 @@ int main(void)
 			exit(1);
 		}
 	}
+
+	printf("Main: count = %d\n", count);
 
 	return 0;
 }

@@ -5,8 +5,10 @@
 
 #define N	8
 #define ROUNDS	1000000
+//#define ROUNDS	1
 
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_spinlock_t spinlock;
+int pshared = PTHREAD_PROCESS_SHARED;
 
 int count;
 __thread int count_t;
@@ -21,11 +23,11 @@ void *routine(void *args)
 	int i;
 	struct targs *targs = (struct targs *)args;
 
+	pthread_spin_lock(&spinlock);
 	for (i = 0; i < ROUNDS; i++) {
-		pthread_mutex_lock(&mutex);
 		count = count  + targs->var;
-		pthread_mutex_unlock(&mutex);
 	}
+	pthread_spin_unlock(&spinlock);
 	printf("Thread %d: count = %d\n", targs->id, count);
 
 	return NULL;
@@ -37,6 +39,12 @@ int main(void)
 	pthread_t threads[N];
 	struct targs thread_args[N];
 	int i, rc;
+	
+	rc = pthread_spin_init(&spinlock, pshared);
+	if (rc != 0) {
+		perror("Spinlock init");
+		exit(1);
+	}
 
 	for (i = 0; i < N; i++) {
 		thread_args[i].id = i;
@@ -55,6 +63,8 @@ int main(void)
 			exit(1);
 		}
 	}
+
+	printf("Main: count = %d\n", count);
 
 	return 0;
 }
